@@ -7,7 +7,172 @@
 #include "matrix.h"
 #include "math.h"
 
+struct matrix * generate_person() {
+  struct matrix * ret = new_matrix(4, 20);
 
+  //head
+  add_circle( ret, 0, 20, 0, 10, 100); 
+
+  //neck
+  add_curve( ret, 5, 11.3397459622,
+	     5, 9.3397459622,
+	     5, 9.3397459622,
+	     7, 9.3397459622,
+	     100, BEZIER );
+  add_curve( ret, -5, 11.3397459622,
+	     -5, 9.3397459622,
+	     -5, 9.3397459622,
+	     -7, 9.3397459622,
+	     100, BEZIER );
+  add_curve( ret, 7, 9.3397459622,
+	     0, 7.5,
+	     0, 7.5,
+	     -7, 9.3397459622,
+	     100, BEZIER );
+
+  //arms
+  add_curve( ret, 7, 9.3397459622,
+	     22, 9.3397459622,
+	     22, 5,
+	     37, 5,
+	     100, BEZIER );
+  add_curve( ret, -7, 9.3397459622,
+	     -22, 9.3397459622,
+	     -22, 5,
+	     -37, 5,
+	     100, BEZIER );
+
+  add_curve( ret, 37, 5,
+	     42, 5,
+	     42, -5,
+	     37, -5,
+	     100, BEZIER );
+  add_curve( ret, -37, 5,
+	     -42, 5,
+	     -42, -5,
+	     -37, -5,
+	     100, BEZIER );
+
+  add_curve( ret, 17, -0.6602540378,
+	     27, -0.6602540378,
+	     27, -5,
+	     37, -5,
+	     100, BEZIER );
+  add_curve( ret, -17, -0.6602540378,
+	     -27, -0.6602540378,
+	     -27, -5,
+	     -37, -5,
+	     100, BEZIER );  
+  
+
+  //body
+  add_curve( ret, 17, -0.6602540378,
+	     14.5, -0.6602540378,
+	     16, -35.6602540378,
+	     17, -35.6602540378,
+	     100, BEZIER );
+  add_curve( ret, -17, -0.6602540378,
+	     -14.5, -0.6602540378,
+	     -16, -35.6602540378,
+	     -17, -35.6602540378,
+	     100, BEZIER );
+  add_curve( ret, -17, -35.6602540378,
+	     0, -40,
+	     0, -40,
+	     17, -35.6602540378,
+	     100, BEZIER );
+
+  
+  //legs
+  add_curve( ret, 17, -35.6602540378,
+	     17, -58,
+	     18.5, -69,
+	     20, -80.6602540378,
+	     100, BEZIER );
+  add_curve( ret, -17, -35.6602540378,
+	     -17, -58,
+	     -15.5, -69,
+	     -14, -80.6602540378,
+	     100, BEZIER );
+
+  add_curve( ret, 4.5, -50.6602540378,
+	     4.5, -65,
+	     6, -73,
+	     7.5, -80.6602540378,
+	     100, BEZIER );
+  add_curve( ret, -4.5, -50.6602540378,
+	     -4.5, -65,
+	     -3, -73,
+	     -1.5, -80.6602540378,
+	     100, BEZIER );
+  add_curve( ret, -4.5, -50.6602540378,
+	     0, -51.5,
+	     0, -51.5,
+	     4.5, -50.6602540378,
+	     100, BEZIER );
+
+  //shoes
+  add_curve( ret, -14, -80.6602540378,
+	     -7.75, -82,
+	     -7.75, -82,
+	     -1.5, -80.6602540378,
+	     100, BEZIER ); 
+  add_curve( ret, 20, -80.6602540378,
+	     13.75, -82,
+	     13.75, -82,
+	     7.5, -80.6602540378,
+	     100, BEZIER );
+
+  add_curve( ret, -14, -80.6602540378,
+	     -18.5, -83.6602540378,
+	     -21, -95.6602540378,
+	     -21, -95.6602540378,
+	     100, BEZIER );
+  add_curve( ret, 7.5, -80.6602540378,
+	     3, -83.6602540378,
+	     0.5, -95.6602540378,
+	     0.5, -95.6602540378,
+	     100, BEZIER );
+  
+  add_curve( ret, -1.5, -80.6602540378,
+	     -3, -92.6602540378,
+	     -3, -92.6602540378,
+	     -21, -95.6602540378,
+	     100, BEZIER );
+  add_curve( ret, 20, -80.6602540378,
+	     18.5, -92.6602540378,
+	     18.5, -92.6602540378,
+	     0.5, -95.6602540378,
+	     100, BEZIER );
+  
+
+  return ret;
+}
+
+void add_person( struct matrix * edges,
+		 double x, double y, double z,
+		 double theta , double scale) {
+
+  int i;
+  struct matrix * perp = generate_person();
+  struct matrix * t = make_rotZ( theta );
+
+  //print_matrix(perp);
+
+  matrix_mult( make_scale( scale, scale, 1 ), t);
+  matrix_mult( make_translate( x, y, z), t);
+
+  matrix_mult( t, perp);
+
+  for (i = 0; i < perp->lastcol; i++) {
+    add_point(edges, perp->m[0][i], perp->m[1][i], perp->m[2][i]);
+  }
+
+}
+
+
+
+  
 /*======== void add_box() ==========
   Inputs:   struct matrix * edges
             double x
@@ -94,7 +259,7 @@ struct matrix * generate_sphere(double cx, double cy, double cz,
   int i;
   double t;
 
-  add_circle(ret, cx, cy, cz, r, step);
+  add_circle(ret, cx, 0, 0, r, step);
   t = (double)1/step;
 
   for (i = 1; i <= step; i++) {
@@ -102,8 +267,10 @@ struct matrix * generate_sphere(double cx, double cy, double cz,
     mult = make_rotX(t * M_PI);
     matrix_mult(mult, ret);
     
-    add_circle(ret, cx, cy, cz, r, step);
+    add_circle(ret, cx, 0, 0, r, step);
   }
+
+  matrix_mult( make_translate(0, cy, cz), ret );
     
     
   return ret;
@@ -157,7 +324,7 @@ struct matrix * generate_torus( double cx, double cy, double cz,
   int i;
   double t;
 
-  add_circle(ret, cx + r2, cy, cz, r1, step);
+  add_circle(ret, r2, cy, 0, r1, step);
   t = (double)1/step;
 
   for (i = 1; i <= step; i++) {
@@ -165,8 +332,10 @@ struct matrix * generate_torus( double cx, double cy, double cz,
     mult = make_rotY(t * 2 * M_PI);
     matrix_mult(mult, ret);
     
-    add_circle(ret, cx + r2, cy, cz, r1, step);
+    add_circle(ret, r2, cy, 0, r1, step);
   }
+
+  matrix_mult( make_translate( cx, 0, cz ), ret );
     
     
   return ret;

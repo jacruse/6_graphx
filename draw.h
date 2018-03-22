@@ -21,6 +21,12 @@ struct matrix * generate_torus( double cx, double cy, double cz,
                                 double r1, double r2, int step );
 
 //advanced shapes
+void add_person( struct matrix * edges,
+		 double x, double y, double z,
+		 double theta , double scale);
+
+struct matrix * generate_person();
+
 void add_circle( struct matrix * edges, 
 		 double cx, double cy, double cz,
                  double r, int step );

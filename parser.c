@@ -106,6 +106,18 @@ void parse_file ( char * filename,
       add_circle( edges, xvals[0], yvals[0], zvals[0], r, step);
     }//end of circle
 
+    else if ( strncmp(line, "person", strlen(line)) == 0 ) {
+      fgets(line, sizeof(line), f);
+      //printf("PERSON\t%s", line);
+
+      sscanf(line, "%lf %lf %lf %lf %lf",
+	     xvals, yvals, zvals, &theta, &r);
+      /*printf("%lf %lf %lf %lf %lf %lf",
+	     xvals[0], yvals[0], zvals[0],
+	     xvals[1], yvals[1], zvals[1]) */
+      add_person(edges, xvals[0], yvals[0], zvals[0], theta, r);      
+    }//end sphere
+    
     else if ( strncmp(line, "sphere", strlen(line)) == 0 ) {
       fgets(line, sizeof(line), f);
       //printf("SPHERE\t%s", line);

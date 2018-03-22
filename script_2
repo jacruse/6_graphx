@@ -1,0 +1,19 @@
+#spheres
+sphere
+400 100 0 150
+sphere
+450 250 0 75
+sphere
+320 210 0 100
+sphere
+270 50 0 95
+#test person
+person
+350 200 0 -0.25 1
+person
+280 225 0 -0.5 1
+person
+220 275 0 -0.875 1
+person
+215 340 0 -2 1
+display
